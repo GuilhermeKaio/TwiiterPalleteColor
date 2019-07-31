@@ -1,0 +1,23 @@
+{
+  "name": "twitterpalletebot",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuilhermeKaio/TwitterPalleteColor.git"
+  },
+  "author": "Kaio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GuilhermeKaio/TwitterPalleteColor/issues"
+  },
+  "homepage": "https://github.com/GuilhermeKaio/TwitterPalleteColor#readme",
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "readline-sync": "^1.4.10"
+  }
+}
