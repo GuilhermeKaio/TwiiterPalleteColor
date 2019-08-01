@@ -15,7 +15,7 @@ function robot() {
     return readline.question('Type a Image search term: ')
   }
 
-  function askAndReturnSearchEngineId(lang){
+  function askAndReturnSearchEngineId(){
 
       return googleSearchCredentials.searchEngineId
   }
