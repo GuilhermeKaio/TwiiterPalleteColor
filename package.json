@@ -17,9 +17,12 @@
   },
   "homepage": "https://github.com/GuilhermeKaio/TwitterPalleteColor#readme",
   "dependencies": {
+    "color-thief-node": "^1.0.3",
     "fs-extra": "^8.1.0",
+    "gm": "^1.23.1",
     "googleapis": "^42.0.0",
     "image-downloader": "^3.5.0",
-    "readline-sync": "^1.4.10"
+    "readline-sync": "^1.4.10",
+    "rgb-hex": "^3.0.0"
   }
 }
