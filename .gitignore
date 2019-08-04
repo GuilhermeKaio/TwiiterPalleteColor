@@ -64,4 +64,5 @@ typings/
 content.json
 
 #Content Folder
-content/original.png
+content/*.png
+content/*jpg

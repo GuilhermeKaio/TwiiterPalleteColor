@@ -12,12 +12,35 @@ const googleSearchCredentials = require('../credentials/google-search.json')
 async function robots() {
   console.log('> [image-robot] Starting...')
   const content = state.load()
+  await deleteOldImages()
   await fetchImagesOfAllSentences(content)
   await downloadAllImages(content)
   await imagePallete()
-  createColorImage(content)
+  await createColorImage(content)
+  await compositeImageSource()
 
   state.save(content)
+
+  async function deleteOldImages(){
+    if(fs.existsSync('./content/background.jpg')){
+      fs.unlinkSync('./content/background.jpg')
+    }
+    if(fs.existsSync('./content/background1.jpg')){
+      fs.unlinkSync('./content/background1.jpg')
+    }
+    if(fs.existsSync('./content/background2.jpg')){
+      fs.unlinkSync('./content/background2.jpg')
+    }
+    if(fs.existsSync('./content/background3.jpg')){
+      fs.unlinkSync('./content/background3.jpg')
+    }
+    if(fs.existsSync('./content/background4.jpg')){
+      fs.unlinkSync('./content/background4.jpg')
+    }
+    if(fs.existsSync('./content/original-resize.jpg')){
+      fs.unlinkSync('./content/original-resize.jpg')
+    }
+  } 
 
   async function fetchImagesOfAllSentences(content) {
 
@@ -39,6 +62,7 @@ async function robots() {
       searchType: 'image',
       num: 1,
       imgSize: 'huge',
+      //imgSize: 'xxlarge',
       imgType: 'photo'
     })
 
@@ -84,7 +108,7 @@ async function robots() {
     content.color5 = rgbHex(color5[0],color5[1],color5[2])
   }
 
-  function createColorImage(content){
+  async function createColorImage(content){
     gm(100, 100,'#'+ content.color1)
       .write('./content/color1.jpg', function (err) {
       })
@@ -101,46 +125,71 @@ async function robots() {
       .write('./content/color5.jpg', function (err) {
       })
     
-    gm(900, 900,'#ddff99f3')
+    gm(900, 900,'#ffffff')
       .write('./content/background.jpg', function (err) {
       })
+      v = true
+    while (v) {
+      if(fs.existsSync('./content/background.jpg')){
+        gm('./content/background.jpg')
+          .composite('./content/color1.jpg')
+          .geometry('+40+760')
+          .write('./content/background1.jpg', function(err) {
+        })
+        v = false
+      } 
+    }
+
+    for (let num = 2; num <= 5;) {
+      if(num <= 2){
+        l =  180 + 40
+      }
+      else{
+        l = (num - 1) * 180 + 40 
+      }
+      if(fs.existsSync('./content/background'+ (num-1) +'.jpg')){
+        await compositeColor(num,l)
+        num = num + 1
+      }
+    }
     
-    gm('./content/background.jpg')
-      .composite('./content/color1.jpg')
-      .geometry('+40+0')
-      .write('./content/background.jpg', function(err) {
-        if(!err) console.log("Written montage image.");
-    })
-
-    gm('./content/background.jpg')
-      .composite('./content/color2.jpg')
-      .geometry('+220+0')
-      .write('./content/background.jpg', function(err) {
-        if(!err) console.log("Written montage image.");
-    })
-
-    gm('./content/background.jpg')
-      .composite('./content/color3.jpg')
-      .geometry('+400+0')
-      .write('./content/background.jpg', function(err) {
-        if(!err) console.log("Written montage image.");
-    })
-
-    gm('./content/background.jpg')
-      .composite('./content/color4.jpg')
-      .geometry('+580+0')
-      .write('./content/background.jpg', function(err) {
-        if(!err) console.log("Written montage image.");
-    })
-
-    gm('./content/background.jpg')
-      .composite('./content/color5.jpg')
-      .geometry('+760+0')
-      .write('./content/background.jpg', function(err) {
-        if(!err) console.log("Written montage image.");
-    })
-    
+    async function compositeColor(num,l){
+      if(num < 5){
+        gm('./content/background'+ (num-1) +'.jpg')
+        .composite('./content/color'+ num +'.jpg')
+        .geometry('+'+ l +'+760')
+        .write('./content/background'+ num +'.jpg', function(err) {
+        })
+      }
+      else{
+        gm('./content/background'+ (num-1) +'.jpg')
+        .composite('./content/color'+ num +'.jpg')
+        .geometry('+'+ l +'+760')
+        .write('./content/pallete_final.jpg', function(err) {
+        })
+      }
+    }
   }
+
+  async function compositeImageSource(){
+    gm('./content/original.jpg')
+    .resize(820, 680, '!')
+    .write('./content/original-resize.jpg', function (err) {
+    });
+  g = true
+  while (g){
+    if(fs.existsSync('./content/original-resize.jpg')){
+      gm('./content/pallete_final.jpg')
+      .composite('./content/original-resize.jpg')
+      .geometry('+40+40')
+      .write('./content/final.jpg', function(err) {
+      }) 
+      g = false
+    }
+  }
+}
+
+  
 
 }
 
