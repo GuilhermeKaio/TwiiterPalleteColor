@@ -45,6 +45,7 @@ async function robots() {
     content.color4 = rgbHex(color4[0], color4[1], color4[2])
     color5 = colorPallete[4]
     content.color5 = rgbHex(color5[0], color5[1], color5[2])
+    console.log('> [image-robot] Color get')
   }
 
   // async function imagePalleteColorGoogle() {
@@ -55,6 +56,7 @@ async function robots() {
   // }
 
   async function createColorImage(content) {
+    console.log('> [image-robot] Creat Color Image')
     gm(100, 100, '#' + content.color1)
       .write('./content/color1.jpg', function (err) {
       })
@@ -153,6 +155,9 @@ async function robots() {
                   .composite('./content/original-resize.jpg')
                   .geometry('+40+40')
                   .write('./content/final.jpg', function (err) {
+                    if (!err){
+                      console.log('> [image-robot] Final Image Created')
+                    }
                   })
               }
             })
