@@ -60,9 +60,6 @@ typings/
 # next.js build output
 .next
 
-# Content
-content.json
+content/*.jpg
 
-#Content Folder
-content/*.png
-content/*jpg
+credentials

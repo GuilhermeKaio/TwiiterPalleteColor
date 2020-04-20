@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -17,14 +17,18 @@
   },
   "homepage": "https://github.com/GuilhermeKaio/TwitterPalleteColor#readme",
   "dependencies": {
+    "@google-cloud/vision": "^1.8.0",
     "color-thief-node": "^1.0.3",
     "fs-extra": "^8.1.0",
     "gm": "^1.23.1",
-    "googleapis": "^42.0.0",
+    "googleapis": "^46.0.0",
     "image-downloader": "^3.5.0",
+    "nsfwjs": "^2.1.0",
+    "random": "^2.2.0",
     "readline-sync": "^1.4.10",
     "rgb-hex": "^3.0.0",
-    "rss-parser": "^3.7.2",
-    "twit": "^2.2.11"
+    "rss-parser": "^3.7.3",
+    "twit": "^2.2.11",
+    "twitter": "^1.7.1"
   }
 }
