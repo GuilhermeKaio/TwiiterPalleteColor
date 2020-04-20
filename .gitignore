@@ -62,4 +62,4 @@ typings/
 
 content/*.jpg
 
-credentials
+credentials/*
