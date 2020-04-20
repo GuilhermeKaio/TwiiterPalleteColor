@@ -103,7 +103,7 @@ async function fetchGoogleAndReturnImagesLinks(query) {
     q: query,
     searchType: 'image',
     num: 10,
-    imgSize: 'huge',
+    imgSize: process.env.imgSize,
     imgType: 'photo'
   })
 
