@@ -101,6 +101,8 @@ async function robots() {
       }
     }
 
+    console.log('> [image-robot] Creat Color Image Done')
+
     function compositeColor(num, l) {
       if (num < 5) {
         gm('./content/background' + (num - 1) + '.jpg')
@@ -120,7 +122,7 @@ async function robots() {
   }
 
   async function compositeImageSource() {
-
+    console.log('> [image-robot] Final Image Started')
     var height
     var width
     gm('./content/original.jpg')
