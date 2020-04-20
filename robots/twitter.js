@@ -1,10 +1,10 @@
 var Twit = require('twit')
 var Twitter = require('twitter')
 const state = require('./state.js')
-const imageDownloader = require('image-downloader')
+//const imageDownloader = require('image-downloader')
 var fs = require('fs')
   , gm = require('gm').subClass({ imageMagick: true })
-const dotenv = require('dotenv')
+//const dotenv = require('dotenv')
 
 async function robots() {
   await init()
@@ -27,7 +27,7 @@ async function robots() {
   }
 
   function tweetImage(content) {
-    dotenv.config()
+    //dotenv.config()
     var T = new Twit({
       consumer_key: process.env.CONSUMER_KEY,
       consumer_secret: process.env.CONSUMER_SECRET,

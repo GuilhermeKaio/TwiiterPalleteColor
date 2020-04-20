@@ -1,7 +1,7 @@
 const state = require('./state.js')
 const imageDownloader = require('image-downloader')
 var Twit = require('twit')
-const dotenv = require('dotenv')
+//const dotenv = require('dotenv')
 async function robots() {
 
   const content = state.load()
@@ -9,7 +9,7 @@ async function robots() {
   //await verifyAdultCotent()
 
   async function GetImageOnMentions(content) {
-    dotenv.config()
+    //dotenv.config()
     var T = new Twit({
       consumer_key: process.env.CONSUMER_KEY,
       consumer_secret: process.env.CONSUMER_SECRET,
