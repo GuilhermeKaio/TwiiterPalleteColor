@@ -49,7 +49,7 @@ async function robots() {
 
       T.post('media/metadata/create', meta_params, function (err, data, response) {
         if (!err) {
-          textstatus = `Expressão pesquisada: ${content.searchTerm} \r\n\r\nCores extraidas: #${content.color1}, #${content.color2}, #${content.color3}, #${content.color4}, #${content.color5} \r\n\r\nSource: ${content.image}`
+          textstatus = `Expressão pesquisada: ${content.searchTerm} \r\n\r\nCores extraidas: #${content.colors[0]}, #${content.colors[1]}, #${content.colors[2]}, #${content.colors[3]}, #${content.colors[4]} \r\n\r\nSource: ${content.image}`
           var params = { status: textstatus, media_ids: [mediaIdStr] }
 
           T.post('statuses/update', params, function (err, data, response) {
