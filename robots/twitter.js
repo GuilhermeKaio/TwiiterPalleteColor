@@ -4,7 +4,7 @@ const state = require('./state.js')
 //const imageDownloader = require('image-downloader')
 var fs = require('fs')
   , gm = require('gm').subClass({ imageMagick: true })
-//const dotenv = require('dotenv')
+const dotenv = require('dotenv')
 
 async function robots() {
   await init()
@@ -15,9 +15,6 @@ async function robots() {
     console.log(2)
     const content = state.load()
     await tweetImage(content)
-    var ignore = {}
-    ignore.ignoreSearchTerm = [content.searchTerm]
-    state.save(ignore)
   }
 
   function sleep(ms) {
@@ -27,7 +24,7 @@ async function robots() {
   }
 
   function tweetImage(content) {
-    //dotenv.config()
+    dotenv.config()
     var T = new Twit({
       consumer_key: process.env.CONSUMER_KEY,
       consumer_secret: process.env.CONSUMER_SECRET,
@@ -49,7 +46,7 @@ async function robots() {
 
       T.post('media/metadata/create', meta_params, function (err, data, response) {
         if (!err) {
-          textstatus = `Expressão pesquisada: ${content.searchTerm} \r\n\r\nCores extraidas: #${content.colors[0]}, #${content.colors[1]}, #${content.colors[2]}, #${content.colors[3]}, #${content.colors[4]} \r\n\r\nSource: ${content.image}`
+          textstatus = `Expressão pesquisada: ${content.searchTerm} \r\n\r\nCores extraidas: #${content.color[0]}, #${content.color[1]}, #${content.color[2]}, #${content.color[3]}, #${content.color[4]} \r\n\r\nSource: ${content.image}`
           var params = { status: textstatus, media_ids: [mediaIdStr] }
 
           T.post('statuses/update', params, function (err, data, response) {
