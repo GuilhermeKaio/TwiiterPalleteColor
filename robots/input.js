@@ -4,7 +4,7 @@ var Twit = require('twit')
 const google = require('googleapis').google
 const customSearch = google.customsearch('v1')
 const imageDownloader = require('image-downloader')
-//const dotenv = require('dotenv')
+const dotenv = require('dotenv')
 
 async function robot() {
   var content = {}
@@ -29,7 +29,7 @@ async function robot() {
   }
 
   async function askAndReturnTrend(content) {
-    //dotenv.config()
+    dotenv.config()
     var T = new Twit({
       consumer_key: process.env.CONSUMER_KEY,
       consumer_secret: process.env.CONSUMER_SECRET,
@@ -96,7 +96,7 @@ async function fetchImagesOfAllSentences(content) {
 }
 
 async function fetchGoogleAndReturnImagesLinks(query) {
-  //dotenv.config()
+  dotenv.config()
   const response = await customSearch.cse.list({
     auth: process.env.apiKey,
     cx: process.env.searchEngineId,

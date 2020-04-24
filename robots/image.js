@@ -2,6 +2,7 @@ const state = require('./state.js')
 const { getPaletteFromURL } = require('color-thief-node')
 const rgbHex = require('rgb-hex')
 const vision = require('@google-cloud/vision')
+const { createCanvas, loadImage } = require('canvas')
 var fs = require('fs')
   , gm = require('gm').subClass({ imageMagick: true })
 
@@ -12,9 +13,9 @@ async function robots() {
 
   if (content.TwitterImage) {
 
-    // await imagePalleteColorGoogle()
-    //await createColorImage(content)
-    //await compositeImageSource()
+    //  await imagePalleteColorGoogle()
+    //  await createColorImage(content)
+    //  await compositeImageSource()
 
   } else {
 
@@ -35,89 +36,47 @@ async function robots() {
   async function imagePalleteColorThief() {
     fileName = `./content/original.jpg`
     const colorPallete = await getPaletteFromURL(fileName)
-    color1 = colorPallete[0]
-    content.color1 = rgbHex(color1[0], color1[1], color1[2])
-    color2 = colorPallete[1]
-    content.color2 = rgbHex(color2[0], color2[1], color2[2])
-    color3 = colorPallete[2]
-    content.color3 = rgbHex(color3[0], color3[1], color3[2])
-    color4 = colorPallete[3]
-    content.color4 = rgbHex(color4[0], color4[1], color4[2])
-    color5 = colorPallete[4]
-    content.color5 = rgbHex(color5[0], color5[1], color5[2])
-    console.log('> [image-robot] Color get')
+    var colors = []
+    var color, hex
+    for (let index = 0; index <= 4; index++) {
+      color = colorPallete[index]
+      hex = rgbHex(color[0], color[1], color[2])
+      colors.push(hex)
+    }
+
+    content.color = colors
   }
 
-  // async function imagePalleteColorGoogle() {
-  //   const client = new vision.ImageAnnotatorClient()
-  //   const fileName = './content/original.jpg'
-  //   const [result] = await client.imageProperties(fileName)
-  //   console.log(result.imagePropertiesAnnotation.dominantColors.colors[0])
-  // }
-
   async function createColorImage(content) {
-    console.log('> [image-robot] Creat Color Image')
-    gm(100, 100, '#' + content.color1)
-      .write('./content/color1.jpg', function (err) {
-      })
-    gm(100, 100, '#' + content.color2)
-      .write('./content/color2.jpg', function (err) {
-      })
-    gm(100, 100, '#' + content.color3)
-      .write('./content/color3.jpg', function (err) {
-      })
-    gm(100, 100, '#' + content.color4)
-      .write('./content/color4.jpg', function (err) {
-      })
-    gm(100, 100, "#" + content.color5)
-      .write('./content/color5.jpg', function (err) {
-      })
 
-    gm(900, 900, '#ffffff')
-      .write('./content/background.jpg', function (err) {
-      })
-    v = true
-    while (v) {
-      if (fs.existsSync('./content/background.jpg')) {
-        gm('./content/background.jpg')
-          .composite('./content/color1.jpg')
-          .geometry('+40+760')
-          .write('./content/background1.jpg', function (err) {
-          })
-        v = false
-      }
+    for (let index = 0; index <= 4; index++) {
+      const canvasPalette = createCanvas(100, 100)
+      const contextPalette = canvasPalette.getContext('2d')
+      contextPalette.fillStyle = "#" + content.color[index]
+      contextPalette.fillRect(0, 0, 100, 100)
+      const buffer = canvasPalette.toBuffer('image/png')
+      fs.writeFileSync(`./content/color${index + 1}.jpg`, buffer)
     }
 
-    for (let num = 2; num <= 5;) {
-      if (num <= 2) {
-        l = 180 + 40
-      }
-      else {
-        l = (num - 1) * 180 + 40
-      }
-      if (fs.existsSync('./content/background' + (num - 1) + '.jpg')) {
-        await compositeColor(num, l)
-        num = num + 1
-      }
-    }
+    const canvasBackground = createCanvas(900, 900)
+    const contextBackground = canvasBackground.getContext('2d')
+    contextBackground.fillStyle = "#ffffff"
+    contextBackground.fillRect(0, 0, 900, 900)
 
-    console.log('> [image-robot] Creat Color Image Done')
+    loadImage('./content/color1.jpg').then(image => {
+      contextBackground.drawImage(image, 40, 760, 100, 100)
+      const buffer = canvasBackground.toBuffer('image/png')
+      fs.writeFileSync(`./content/background1.jpg`, buffer)
+    })
 
-    function compositeColor(num, l) {
-      if (num < 5) {
-        gm('./content/background' + (num - 1) + '.jpg')
-          .composite('./content/color' + num + '.jpg')
-          .geometry('+' + l + '+760')
-          .write('./content/background' + num + '.jpg', function (err) {
-          })
-      }
-      else {
-        gm('./content/background' + (num - 1) + '.jpg')
-          .composite('./content/color' + num + '.jpg')
-          .geometry('+' + l + '+760')
-          .write('./content/pallete_final.jpg', function (err) {
-          })
-      }
+    for (let num = 2; num <= 5; num++) {
+      width = (num - 1) * 180 + 40
+      console.log(width)
+      await loadImage('./content/color' + num + '.jpg').then(image1 => {
+        contextBackground.drawImage(image1, width, 760, 100, 100)
+        const buffer = canvasBackground.toBuffer('image/png')
+        fs.writeFileSync('./content/background' + num + '.jpg', buffer)
+      })
     }
   }
 
@@ -125,46 +84,50 @@ async function robots() {
     console.log('> [image-robot] Final Image Started')
     var height
     var width
-    gm('./content/original.jpg')
-      .size(function (err, size) {
-        if (!err) {
-          if (size.width > size.height) {
-            height = size.height
-            width = (size.height * 1.20)
-          }
-          else {
-            height = (size.width * 0.82)
-            width = size.width
-          }
-        }
-        else {
-          console.log(err)
-        }
-      })
 
-    await sleep(2000)
+    await loadImage('./content/original.jpg').then(image => {
+      if (image.width > image.height) {
+        height = image.height
+        width = (image.height * 1.20)
+      }
+      else {
+        height = (image.width * 0.82)
+        width = image.width
+      }
+      const canvasCrop = createCanvas(width, height)
+      const contextCrop = canvasCrop.getContext('2d')
 
-    gm('./content/original.jpg')
-      .gravity('Center')
-      .crop(width, height)
-      .write('./content/original-crop.jpg', function (err) {
-        if (!err) {
-          gm('./content/original-crop.jpg')
-            .resize(820, 680, '!')
-            .write('./content/original-resize.jpg', function (err) {
-              if (!err) {
-                gm('./content/pallete_final.jpg')
-                  .composite('./content/original-resize.jpg')
-                  .geometry('+40+40')
-                  .write('./content/final.jpg', function (err) {
-                    if (!err){
-                      console.log('> [image-robot] Final Image Created')
-                    }
-                  })
-              }
-            })
-        }
+      // sx = source x
+      // sy = source y
+      // sw = source width
+      // sh = source height
+      // dx = destination x
+      // dy = destination y
+      // dw = destination width
+      // dh = destination height
+
+      sx = (image.width - width)/2
+      sy = (image.height - height)/2
+
+      console.log(sx)
+      console.log(sy)
+      contextCrop.drawImage(image, sx, sy, width, height, 0, 0, width, height)
+
+      const buffer = canvasCrop.toBuffer('image/png')
+      fs.writeFileSync('./content/original-resize.jpg', buffer)
+    })
+
+    const canvasFinal = createCanvas(900, 900)
+    const contextFinal = canvasFinal.getContext('2d')
+
+    await loadImage('./content/background5.jpg').then(image => {
+      contextFinal.drawImage(image, 0, 0, 900, 900)
+      loadImage('./content/original-resize.jpg').then(image1 => {
+        contextFinal.drawImage(image1, 40, 40, 820, 680)
+        const buffer = canvasFinal.toBuffer('image/png')
+        fs.writeFileSync('./content/final.jpg', buffer)
       })
+    })
   }
 
 }

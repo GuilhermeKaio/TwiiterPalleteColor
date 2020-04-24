@@ -9,7 +9,7 @@ async function robots() {
         if (fs.existsSync('./content/background.jpg')) {
             fs.unlinkSync('./content/background.jpg')
         }
-        for (let index = 1; index <= 4; index++) {
+        for (let index = 1; index <= 5; index++) {
             if (fs.existsSync(`./content/background${index}.jpg`)) {
                 fs.unlinkSync(`./content/background${index}.jpg`)
             }

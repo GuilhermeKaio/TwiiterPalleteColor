@@ -61,5 +61,6 @@ typings/
 .next
 
 content/*.jpg
+content/*.png
 
 credentials/*

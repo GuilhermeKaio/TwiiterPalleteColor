@@ -9,11 +9,10 @@ const robots = {
 async function start() {
   await robots.delete()
   await robots.input()
-  //await robots.imagetwitter()
+  // await robots.imagetwitter()
   await robots.image()
-  //await robots.twitter()
+  await robots.twitter()
   await robots.delete()
 }
 
 start()
-
