@@ -15,6 +15,8 @@ async function robots() {
     console.log(2)
     const content = state.load()
     await tweetImage(content)
+    content.teste += 1
+    state.save(content)
   }
 
   function sleep(ms) {

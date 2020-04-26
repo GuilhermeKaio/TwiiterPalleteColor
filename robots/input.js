@@ -15,7 +15,7 @@ async function robot() {
   await downloadAllImages(content)
 
   console.log(content.searchTerm)
-
+  console.log(content.teste)
   state.save(content)
 
   async function getTerm(content) {
